@@ -1,0 +1,12 @@
+repos: 
+  - repo: https://github.com/psf/black
+    rev: main 
+    hooks: 
+    - id: black 
+      args: [--line-length=79]
+  
+  - repo: https://github.com/pycqa/isort
+    rev: main   
+    hooks: 
+    - id: isort 
+      args: [--multi-line=3, --trailing-comma]
