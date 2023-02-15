@@ -5,12 +5,6 @@ from blog.models import Article
 
 
 def test_create_article():
-    """
-    GIVEN CreateArticleCommand with valid author, title, and content properties
-    WHEN the execute method is called
-    THEN a new Article must exist in the database with the same attributes
-    """
-
     cmd = CreateArticleCommand(
         auther="aashish@gmail.com",
         title="My New Article",
@@ -28,4 +22,13 @@ def test_create_article():
 
 
 def test_create_article_already_exists():
-    pass
+    Article(
+        auther="aashish@gmail.com", title="New one", content="Hello, new world"
+    ).save()
+
+    cmd = CreateArticleCommand(
+        auther="aashish@gmail.com", title="New one", content="Hello, world!"
+    )
+
+    with pytest.raises(AlreadyExists):
+        cmd.execute()

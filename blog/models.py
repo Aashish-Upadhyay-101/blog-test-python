@@ -86,6 +86,6 @@ class Article(BaseModel):
         con = sqlite3.connect(database_name)
 
         con.execute(
-            "CREATE TABLE IF NOT EXISTS article (id TEXT, auther TEXT, title TEXT, content TEXT"
+            "CREATE TABLE IF NOT EXISTS articles (id TEXT, auther TEXT, title TEXT, content TEXT"
         )
         con.close()
