@@ -8,7 +8,7 @@ class AlreadyExists(Exception):
 
 
 class CreateArticleCommand(BaseModel):
-    auther: EmailStr
+    author: EmailStr
     title: str
     content: str
 
@@ -20,7 +20,15 @@ class CreateArticleCommand(BaseModel):
             pass
 
         article = Article(
-            auther=self.auther, title=self.title, content=self.content
+            author=self.author, title=self.title, content=self.content
         ).save()
 
         return article
+
+
+article = CreateArticleCommand(
+    author="aashish@gmail.com",
+    title="first article",
+    content="first one haha lol",
+)
+article.execute()

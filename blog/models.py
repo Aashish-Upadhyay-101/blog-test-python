@@ -12,7 +12,7 @@ class NotFound(Exception):
 
 class Article(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    auther: EmailStr
+    author: EmailStr
     title: str
     content: str
 
@@ -22,7 +22,7 @@ class Article(BaseModel):
         con.row_factory = sqlite3.Row
 
         cur = con.cursor()
-        cur.execute("SELECT * FROM article where id=?", (article_id,))
+        cur.execute("SELECT * FROM articles where id=?", (article_id,))
 
         record = cur.fetchone()
 
@@ -40,7 +40,7 @@ class Article(BaseModel):
         con.row_factory = sqlite3.Row
 
         cur = con.cursor()
-        cur.execute("SELECT * FROM article where title=?", (article_title,))
+        cur.execute("SELECT * FROM articles where title=?", (article_title,))
 
         record = cur.fetchone()
 
@@ -74,8 +74,8 @@ class Article(BaseModel):
         with sqlite3.connect(os.getenv("DATABASE_NAME", "database.db")) as con:
             cur = con.cursor()
             cur.execute(
-                "INSERT INTO article (id, auther, title, content) VALUES (?, ?, ?, ?)",
-                (self.id, self.auther, self.title, self.content),
+                "INSERT INTO articles (id, author, title, content) VALUES (?, ?, ?, ?)",
+                (self.id, self.author, self.title, self.content),
             )
             con.commit()
 
@@ -83,9 +83,12 @@ class Article(BaseModel):
 
     @classmethod
     def create_table(cls, database_name="database.db"):
-        con = sqlite3.connect(database_name)
+        try:
+            conn = sqlite3.connect(database_name)
 
-        con.execute(
-            "CREATE TABLE IF NOT EXISTS articles (id TEXT, auther TEXT, title TEXT, content TEXT"
-        )
-        con.close()
+            conn.execute(
+                "CREATE TABLE IF NOT EXISTS articles (id TEXT, author TEXT, title TEXT, content TEXT)"
+            )
+            conn.close()
+        except Exception as e:
+            print(e)
